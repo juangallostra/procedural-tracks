@@ -41,7 +41,6 @@ def shape_track(track_points, difficulty=0.85, max_displacement=60):
     for i in range(len(track_points)):
         displacement = math.pow(rn.random(), difficulty) * max_displacement
         disp = [displacement * i for i in make_rand_vector(2)]
-        print(disp)
         track_set[i*2] = track_points[i]
         track_set[i*2 + 1][0] = int((track_points[i][0] + track_points[(i+1)%len(track_points)][0]) / 2 + disp[0])
         track_set[i*2 + 1][1] = int((track_points[i][1] + track_points[(i+1)%len(track_points)][1]) / 2 + disp[1])
