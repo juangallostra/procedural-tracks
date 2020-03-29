@@ -11,6 +11,8 @@ HEIGHT = 300
 
 WHITE = [255, 255, 255]
 RED = [255, 0, 0]
+BLUE = [0, 0, 255]
+GRASS_GREEN = [58, 156, 53]
 
 def random_points(min=10, max=20, margin=25):
     pointCount = rn.randrange(min, max+1, 1)
@@ -36,7 +38,7 @@ def make_rand_vector(dims):
     mag = sum(x**2 for x in vec) ** .5
     return [x/mag for x in vec]
 
-def shape_track(track_points, difficulty=0.85, max_displacement=60):
+def shape_track(track_points, difficulty=0.6, max_displacement=45):
     track_set = [[0,0] for i in range(len(track_points)*2)] 
     for i in range(len(track_points)):
         displacement = math.pow(rn.random(), difficulty) * max_displacement
@@ -79,7 +81,7 @@ def paint_line(surface, color, init, end):
 def main(debug=True):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    background_color = [58, 156, 53]
+    background_color = GRASS_GREEN
     screen.fill(background_color)
 
     # generate random points
@@ -89,8 +91,8 @@ def main(debug=True):
     if debug:
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
-        draw_points(screen, [0,0,255], track_points)
-        draw_lines_from_points(screen, [0,0,255], track_points)
+        draw_points(screen, BLUE, track_points)
+        draw_lines_from_points(screen, BLUE, track_points)
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main game loop
