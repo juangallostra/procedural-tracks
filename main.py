@@ -182,6 +182,7 @@ def draw_convex_hull(hull, surface, points, color):
                 points[hull.vertices[0]],
                 points[hull.vertices[-1]]
             )
+
 def draw_lines_from_points(surface, color, points):
     for i in range(len(points)-1):
         draw_single_line(surface, color, points[i], points[i+1])
@@ -213,11 +214,11 @@ def main(debug=True):
     track_points = shape_track(get_track_points(hull, points))
     f_points = smooth_track(track_points)
     if debug:
-        draw_points(screen, BLACK, f_points)
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
         draw_lines_from_points(screen, BLUE, track_points)    
+    draw_points(screen, BLACK, f_points)
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main game loop
