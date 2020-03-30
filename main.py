@@ -5,19 +5,53 @@ import math
 import numpy as np
 import scipy as sc
 from scipy.spatial import ConvexHull
+from scipy import interpolate
 
-WIDTH = 500 
-HEIGHT = 300
+WIDTH = 800 
+HEIGHT = 600
 
 WHITE = [255, 255, 255]
+BLACK = [0, 0, 0]
 RED = [255, 0, 0]
 BLUE = [0, 0, 255]
 GRASS_GREEN = [58, 156, 53]
 
-MARGIN = 40
+MARGIN = 50
+MIN_DISTANCE = 20
+MAX_DISPLACEMENT = 80
+DIFFICULTY = 0.1
+MIN_POINTS = 20
+MAX_POINTS = 30
+DISTANCE_BETWEEN_POINTS = 20
+
+COOL_TRACK_SEEDS = [
+    911, 
+    639620465, 
+    666574559, 
+    689001243, 
+    608068482, 
+    1546, 
+    8, 
+    83, 
+    945, 
+    633, 
+    10, 
+    23, 
+    17, 
+    123, 
+    1217, 
+    12, 
+    5644, 
+    5562, 
+    2317, 
+    1964, 
+    95894, 
+    95521
+]
+# SEED = 
 
 ## logical functions
-def random_points(min=10, max=20, margin=MARGIN, min_distance=40):
+def random_points(min=MIN_POINTS, max=MAX_POINTS, margin=MARGIN, min_distance=MIN_DISTANCE):
     pointCount = rn.randrange(min, max+1, 1)
     points = []
     for i in range(pointCount):
@@ -38,7 +72,7 @@ def make_rand_vector(dims):
     mag = sum(x**2 for x in vec) ** .5
     return [x/mag for x in vec]
 
-def shape_track(track_points, difficulty=0.15, max_displacement=50, margin=MARGIN):
+def shape_track(track_points, difficulty=DIFFICULTY, max_displacement=MAX_DISPLACEMENT, margin=MARGIN):
     track_set = [[0,0] for i in range(len(track_points)*2)] 
     for i in range(len(track_points)):
         displacement = math.pow(rn.random(), difficulty) * max_displacement
@@ -63,7 +97,7 @@ def shape_track(track_points, difficulty=0.15, max_displacement=50, margin=MARGI
         final_set.append(point)
     return final_set
 
-def push_points_apart(points, distance=30):
+def push_points_apart(points, distance=DISTANCE_BETWEEN_POINTS):
     # distance might need some tweaking
     distance2 = distance*distance 
     for i in range(len(points)):
@@ -116,6 +150,22 @@ def fix_angles(points, max_angle=100):
         points[next_point][1] = int(points[i][1] + new_y)
     return points
 
+def smooth_track(track_points):
+    x = np.array([p[0] for p in track_points])
+    y = np.array([p[1] for p in track_points])
+
+    # append the starting x,y coordinates
+    x = np.r_[x, x[0]]
+    y = np.r_[y, y[0]]
+
+    # fit splines to x=f(u) and y=g(u), treating both as periodic. also note that s=0
+    # is needed in order to force the spline fit to pass through all the input points.
+    tck, u = interpolate.splprep([x, y], s=0, per=True)
+
+    # evaluate the spline fits for 1000 evenly spaced distance values
+    xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
+    return [(int(xi[i]), int(yi[i])) for i in range(len(xi))]
+
 ## drawing functions
 def draw_points(surface, color, points):
     for p in points:
@@ -161,11 +211,13 @@ def main(debug=True):
     points = random_points(10, 20)
     hull = ConvexHull(points) # points may have to be pushed away
     track_points = shape_track(get_track_points(hull, points))
+    f_points = smooth_track(track_points)
     if debug:
+        draw_points(screen, BLACK, f_points)
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
-        draw_lines_from_points(screen, BLUE, track_points)
+        draw_lines_from_points(screen, BLUE, track_points)    
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main game loop
@@ -176,4 +228,5 @@ def main(debug=True):
         pygame.display.update()
 
 if __name__ == '__main__':
+    # rn.seed(rn.choice(COOL_TRACK_SEEDS))
     main()
