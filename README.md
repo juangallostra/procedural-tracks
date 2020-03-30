@@ -14,7 +14,7 @@ The outline of the algorithm is:
 4. Push points whose distance is less than a predefined threshold apart an limit the max angle between them.
 5. From the final set of points, compute a spline that passess through all of them.
 
-## Example bare bones tracks
+## Example tracks
 
 ![Example Track 1](/img/track_1.png)
 ![Example Track 2](/img/track_2.png)
