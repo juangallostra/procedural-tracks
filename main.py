@@ -15,6 +15,7 @@ BLACK = [0, 0, 0]
 RED = [255, 0, 0]
 BLUE = [0, 0, 255]
 GRASS_GREEN = [58, 156, 53]
+GREY = [186, 182, 168]
 
 MARGIN = 50
 MIN_DISTANCE = 20
@@ -118,7 +119,7 @@ def push_points_apart(points, distance=DISTANCE_BETWEEN_POINTS):
                 points[i][1] = int(points[i][1] - dy);  
     return points
 
-def fix_angles(points, max_angle=100):
+def fix_angles(points, max_angle=90):
     for i in range(len(points)):
         if i > 0:
             prev_point = i - 1
@@ -202,6 +203,33 @@ def draw_single_point(surface, color, pos, radius=2):
 def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
+def draw_track(surface, color, points):
+    # for each pair of points compute perpendicular
+    ### TEST
+    chunk_dimensions = (30, 25)
+    for i in range(len(points)):
+        point = points[i]
+        next_point = points[(i+6) % len(points)]
+        perp_vec = (next_point[1]-point[1], -(next_point[0]-point[0]))
+        if perp_vec == (0,0):
+            continue  
+        d = math.hypot(*perp_vec)
+        n_perp_vec = (perp_vec[0]/d, perp_vec[1]/d)
+        sign = 1
+        if n_perp_vec[1] > 0:
+            sign = -1
+        # compute rotation angle
+        rot = math.degrees(math.atan2(n_perp_vec[1], n_perp_vec[0]))
+        # rot = math.degrees(math.atan(n_perp_vec[0]))
+        # compute blit position
+        blit = point
+        track_chunk = pygame.Surface(chunk_dimensions, pygame.SRCALPHA)
+        # change its background color
+        track_chunk.fill(GREY)
+        surf = pygame.transform.rotate(track_chunk, sign*rot)
+        # blit myNewSurface onto the main screen at the position (0, 0)
+        surface.blit(surf, blit)
+
 def main(debug=True):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -218,7 +246,9 @@ def main(debug=True):
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
         draw_lines_from_points(screen, BLUE, track_points)    
-    draw_points(screen, BLACK, f_points)
+        draw_points(screen, BLACK, f_points)
+    ## TEST
+    draw_track(screen, GREY, f_points)
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main game loop
@@ -230,4 +260,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main()
+    main(debug=False)
