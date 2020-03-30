@@ -260,4 +260,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=False)
+    main(debug=True)
