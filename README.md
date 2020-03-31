@@ -18,7 +18,4 @@ The outline of the algorithm is:
 
 ## Example tracks
 
-![Example Track 1](/img/track_1.png)
-![Example Track 2](/img/track_2.png)
-![Example Track 3](/img/track_3.png)
-![Example Track 4](/img/track_4.png)
+![Example Tracks](/img/tracks.png)
