@@ -204,31 +204,13 @@ def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
 def draw_track(surface, color, points):
-    # for each pair of points compute perpendicular
-    ### TEST
-    chunk_dimensions = (30, 25)
-    for i in range(len(points)):
-        point = points[i]
-        next_point = points[(i+6) % len(points)]
-        perp_vec = (next_point[1]-point[1], -(next_point[0]-point[0]))
-        if perp_vec == (0,0):
-            continue  
-        d = math.hypot(*perp_vec)
-        n_perp_vec = (perp_vec[0]/d, perp_vec[1]/d)
-        sign = 1
-        if n_perp_vec[1] > 0:
-            sign = -1
-        # compute rotation angle
-        rot = math.degrees(math.atan2(n_perp_vec[1], n_perp_vec[0]))
-        # rot = math.degrees(math.atan(n_perp_vec[0]))
-        # compute blit position
-        blit = point
+    radius = 35
+    chunk_dimensions = (radius, radius)
+    for point in points:
+        blit = (point[0] -radius / 2, point[1] - radius/2)
         track_chunk = pygame.Surface(chunk_dimensions, pygame.SRCALPHA)
-        # change its background color
-        track_chunk.fill(GREY)
-        surf = pygame.transform.rotate(track_chunk, sign*rot)
-        # blit myNewSurface onto the main screen at the position (0, 0)
-        surface.blit(surf, blit)
+        pygame.draw.circle(track_chunk, color, (0, 0), radius)
+        surface.blit(track_chunk, blit)
 
 def main(debug=True):
     pygame.init()
