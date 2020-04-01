@@ -25,6 +25,10 @@ MIN_POINTS = 20
 MAX_POINTS = 30
 DISTANCE_BETWEEN_POINTS = 20
 
+STARTING_GRID_TILE = 'grid_tile.png'
+START_TILE_HEIGHT = 10
+START_TILE_WIDTH = 10
+
 COOL_TRACK_SEEDS = [
     911, 
     639620465, 
@@ -203,10 +207,29 @@ def draw_track(surface, color, points):
     radius = 20
     chunk_dimensions = (radius * 2, radius * 2)
     for point in points:
-        blit = (point[0] - radius, point[1] - radius)
+        blit_pos = (point[0] - radius, point[1] - radius)
         track_chunk = pygame.Surface(chunk_dimensions, pygame.SRCALPHA)
         pygame.draw.circle(track_chunk, color, (radius, radius), radius)
-        surface.blit(track_chunk, blit)
+        surface.blit(track_chunk, blit_pos)
+    starting_grid = draw_starting_grid(radius*2)
+    # rotate and place starting grid
+    vec_p = [points[3][1] - points[0][1], -(points[3][0] - points[0][0])]
+    n_vec_p = [vec_p[0] / math.hypot(vec_p[0], vec_p[1]), vec_p[1] / math.hypot(vec_p[0], vec_p[1])]
+    # compute angle
+    angle = math.degrees(math.atan2(n_vec_p[1], n_vec_p[0]))
+    rot_grid = pygame.transform.rotate(starting_grid, -angle)
+    start_pos = (points[0][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[0][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
+    surface.blit(rot_grid, start_pos)
+
+def draw_starting_grid(track_width):
+    tile_height = START_TILE_HEIGHT # Move outside
+    tile_width = START_TILE_WIDTH # Move outside
+    grid_tile = pygame.image.load(STARTING_GRID_TILE)
+    starting_grid = pygame.Surface((track_width, tile_height), pygame.SRCALPHA)
+    for i in range(track_width // tile_height):
+        position = (i*tile_width, 0)
+        starting_grid.blit(grid_tile, position)
+    return starting_grid
 
 def main(debug=True):
     pygame.init()
@@ -238,4 +261,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=True)
+    main(debug=False)
