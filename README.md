@@ -27,3 +27,8 @@ By following this steps we can get the layout of the track.
 Once the layout has been obtained we can draw the racetrack to get a more appealing result. 
 
 ![Example drawn tracks](/img/tracks_drawn.png)
+
+## TODO
+
+- [ ] Test other interpolation methods to obtain the smoothed track.
+- [ ] Add kerbs to corners. 
