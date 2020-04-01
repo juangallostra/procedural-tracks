@@ -198,18 +198,17 @@ def draw_lines_from_points(surface, color, points):
 
 def draw_single_point(surface, color, pos, radius=2):
     pygame.draw.circle(surface, color, pos, radius)
-    # surface.fill(color, (pos, (1, 1)))
 
 def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
 def draw_track(surface, color, points):
-    radius = 35
-    chunk_dimensions = (radius, radius)
+    radius = 20
+    chunk_dimensions = (radius * 2, radius * 2)
     for point in points:
-        blit = (point[0] -radius / 2, point[1] - radius/2)
+        blit = (point[0] - radius, point[1] - radius)
         track_chunk = pygame.Surface(chunk_dimensions, pygame.SRCALPHA)
-        pygame.draw.circle(track_chunk, color, (0, 0), radius)
+        pygame.draw.circle(track_chunk, color, (radius, radius), radius)
         surface.blit(track_chunk, blit)
 
 def main(debug=True):
