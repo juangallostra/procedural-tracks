@@ -31,4 +31,5 @@ Once the layout has been obtained we can draw the racetrack to get a more appeal
 ## TODO
 
 - [ ] Test other interpolation methods to obtain the smoothed track.
+- [ ] Tune parameters
 - [ ] Add kerbs to corners. 
