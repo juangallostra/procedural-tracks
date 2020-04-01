@@ -139,14 +139,11 @@ def fix_angles(points, max_angle=90):
         a = math.atan2(px * ny - py * nx, px * nx + py * ny)
         if (abs(math.degrees(a)) <= max_angle):
             continue
-        nA = math.radians(max_angle * math.copysign(1,a))
-        diff = nA -a
+        diff = math.radians(max_angle * math.copysign(1,a)) - a
         c = math.cos(diff)
         s = math.sin(diff)
-        new_x = nx * c - ny * s
-        new_y = nx * s + ny * c
-        new_x *= nl  
-        new_y *= nl
+        new_x = (nx * c - ny * s) * nl
+        new_y = (nx * s + ny * c) * nl
         points[next_point][0] = int(points[i][0] + new_x)
         points[next_point][1] = int(points[i][1] + new_y)
     return points
@@ -219,7 +216,7 @@ def main(debug=True):
 
     # generate random points
     points = random_points(10, 20)
-    hull = ConvexHull(points) # points may have to be pushed away
+    hull = ConvexHull(points)
     track_points = shape_track(get_track_points(hull, points))
     f_points = smooth_track(track_points)
     if debug:
