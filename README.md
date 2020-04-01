@@ -16,6 +16,14 @@ The outline of the algorithm is:
 4. Push points whose distance is less than a predefined threshold apart an limit the max angle between them.
 5. From the final set of points, compute a spline that passess through all of them.
 
-## Example tracks
+## Example layouts
+
+By following this steps we can get the layout of the track.
 
 ![Example Tracks](/img/tracks.png)
+
+## Example racetracks
+
+Once the layout has been obtained we can draw the racetrack to get a more appealing result. 
+
+![Example drawn tracks](/img/tracks_drawn.png)
