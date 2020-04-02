@@ -30,7 +30,8 @@ Once the layout has been obtained we can draw the racetrack to get a more appeal
 
 ## TODO
 
-- [ ] Refactor code when track drawing is finished
+- [ ] Fix inconsistencies in data structures.
+- [ ] Refactor code when track drawing is finished.
 - [ ] Test other interpolation methods to obtain the smoothed track.
-- [ ] Tune parameters
+- [ ] Tune parameters.
 - [ ] Add kerbs to corners. 
