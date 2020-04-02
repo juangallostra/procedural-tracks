@@ -26,7 +26,8 @@ MIN_POINTS = 20
 MAX_POINTS = 30
 DISTANCE_BETWEEN_POINTS = 20
 MAX_ANGLE = 90
-KERB_ANGLE = 45
+MIN_KERB_ANGLE = 45
+MAX_KERB_ANGLE = 90
 
 ## Drawing
 STARTING_GRID_TILE = 'grid_tile.png'
@@ -34,8 +35,8 @@ START_TILE_HEIGHT = 10
 START_TILE_WIDTH = 10
 
 KERB_TILE = 'kerb_tile.png'
-KERB_TILE_HEIGHT = 18
-KERB_TILE_WIDTH = 18
+KERB_TILE_HEIGHT = 7
+KERB_TILE_WIDTH = 12
 
 COOL_TRACK_SEEDS = [
     911, 
@@ -160,7 +161,7 @@ def fix_angles(points, max_angle=MAX_ANGLE):
         points[next_point][1] = int(points[i][1] + new_y)
     return points
 
-def get_corners_with_kerb(points, kerb_angle=KERB_ANGLE):
+def get_corners_with_kerb(points, min_kerb_angle=MIN_KERB_ANGLE, max_kerb_angle=MAX_KERB_ANGLE):
     require_kerb = []
     for i in range(len(points)):
         if i > 0:
@@ -179,7 +180,7 @@ def get_corners_with_kerb(points, kerb_angle=KERB_ANGLE):
         nx /= nl
         ny /= nl  
         a = math.atan2(px * ny - py * nx, px * nx + py * ny)
-        if (abs(math.degrees(a)) <= kerb_angle):
+        if ( min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
             continue
         require_kerb.append(points[i])
     return require_kerb
@@ -200,9 +201,26 @@ def smooth_track(track_points):
     xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
     return [(int(xi[i]), int(yi[i])) for i in range(len(xi))]
 
-def get_corners_from_kp(complete_track, corner_kp):
+def get_full_corners(track_points, corners):
+    # get full range of points that conform the corner
+    offset = 25
+    corners_in_track = get_corners_from_kp(track_points, corners)
+    # for each corner keypoint in smoothed track, 
+    # get the set of points that make the corner.
+    # This are the offset previous and offset next points
+    f_corners = []
+    for corner in corners_in_track:
+        # get kp index
+        i = track_points.index(corner)
+        # build temp list to get set of points
+        tmp_track_points = track_points + track_points + track_points
+        f_corner = tmp_track_points[i+len(track_points)-1-offset:i+len(track_points)-1+offset]
+        f_corners.append(f_corner)
+    return f_corners
+
+def get_corners_from_kp(complete_track, corner_kps):
     # for each detected corner find closest point in final track (smoothed track)
-    return [find_closest_point(complete_track, corner) for corner in corner_kp]
+    return [find_closest_point(complete_track, corner) for corner in corner_kps]
 
 def find_closest_point(points, keypoint):
     min_dist = None
@@ -249,7 +267,10 @@ def draw_single_point(surface, color, pos, radius=2):
 def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
-def draw_track(surface, color, points):
+def draw_track(surface, color, points, corners):
+    # WIP: draw kerbs
+    draw_corner_kerbs(surface, corners)
+    # draw track
     radius = 20
     chunk_dimensions = (radius * 2, radius * 2)
     for point in points:
@@ -267,9 +288,6 @@ def draw_track(surface, color, points):
     rot_grid = pygame.transform.rotate(starting_grid, -angle)
     start_pos = (points[0][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[0][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
     surface.blit(rot_grid, start_pos)
-    # WIP: draw kerbs
-    # kerb = draw_single_kerb(radius*2)
-    # surface.blit(kerb, (100,100))
 
 def draw_starting_grid(track_width):
     tile_height = START_TILE_HEIGHT # Move outside
@@ -281,11 +299,48 @@ def draw_starting_grid(track_width):
         starting_grid.blit(grid_tile, position)
     return starting_grid
 
-def draw_single_kerb(track_width):
+def draw_corner_kerbs(track_surface, corners):
+    # rotate and place kerbs
+    rad = 20
+    step = 4
+    offset = 5
+    sec_x = 5
+    sec_y = 4
+    for corner in corners:
+        temp_corner = corner + corner
+        last_kerb = None
+        for i in range(0, len(corner), step):
+            # parallel vector
+            vec_p = [temp_corner[i+offset][0] - temp_corner[i][0], temp_corner[i+offset][1] - temp_corner[i][1]]
+            n_vec_p = [vec_p[0] / math.hypot(vec_p[0], vec_p[1]), vec_p[1] / math.hypot(vec_p[0], vec_p[1])]
+            # perpendicular vector
+            vec_perp = [temp_corner[i+offset][1] - temp_corner[i][1], -(temp_corner[i+offset][0] - temp_corner[i][0])]
+            n_vec_perp = [vec_perp[0] / math.hypot(vec_perp[0], vec_perp[1]), vec_perp[1] / math.hypot(vec_perp[0], vec_perp[1])]
+            # compute angle
+            angle = math.degrees(math.atan2(n_vec_p[1], n_vec_p[0]))
+            kerb = draw_single_kerb()
+            rot_kerb = pygame.transform.rotate(kerb, -angle)
+            m_x = 1
+            m_y = 1
+            if angle > 180:
+                m_x = -1
+            start_pos = (
+                corner[i][0] + m_x * n_vec_perp[0] * rad - sec_x, 
+                corner[i][1] + m_y * n_vec_perp[1] * rad - sec_y
+            )
+            if last_kerb is None:
+                last_kerb = start_pos
+            else:
+                if math.hypot(start_pos[0] - last_kerb[0], start_pos[1]-last_kerb[1]) >= rad:
+                    continue
+            last_kerb = start_pos
+            track_surface.blit(rot_kerb, start_pos)
+
+def draw_single_kerb():
     tile_height = KERB_TILE_HEIGHT # Move outside
     tile_width = KERB_TILE_WIDTH # Move outside
     kerb_tile = pygame.image.load(KERB_TILE)
-    kerb = pygame.Surface((track_width, tile_height), pygame.SRCALPHA)
+    kerb = pygame.Surface((tile_width, tile_height), pygame.SRCALPHA)
     kerb.blit(kerb_tile, (0, 0))
     return kerb
 
@@ -302,19 +357,17 @@ def main(debug=True):
     corner_points = get_corners_with_kerb(track_points)
     f_points = smooth_track(track_points)
     # get complete corners from keypoints
-    corners = get_corners_from_kp(f_points, corner_points)
+    corners = get_full_corners(f_points, corner_points)
     if debug:
         # draw the different elements that end up
         # making the track
-        print(corner_points)
-        print(corners)
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
         draw_lines_from_points(screen, BLUE, track_points)    
         draw_points(screen, BLACK, f_points)
     # draw the actual track (road, kerbs, starting grid)
-    draw_track(screen, GREY, f_points)
+    draw_track(screen, GREY, f_points, corners)
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main loop
@@ -326,4 +379,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=True)
+    main(debug=False)
