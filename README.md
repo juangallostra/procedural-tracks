@@ -40,4 +40,4 @@ I have also tried to, given a minimum and maximum track angle corners, draw kerb
 - [ ] Refactor code when track drawing is finished.
 - [ ] Test other interpolation methods to obtain the smoothed track.
 - [ ] Tune parameters.
-- [ ] Add kerbs to corners. 
+- [x] Add kerbs to corners. 
