@@ -180,7 +180,7 @@ def get_corners_with_kerb(points, min_kerb_angle=MIN_KERB_ANGLE, max_kerb_angle=
         nx /= nl
         ny /= nl  
         a = math.atan2(px * ny - py * nx, px * nx + py * ny)
-        if ( min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
+        if (min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
             continue
         require_kerb.append(points[i])
     return require_kerb
@@ -203,7 +203,7 @@ def smooth_track(track_points):
 
 def get_full_corners(track_points, corners):
     # get full range of points that conform the corner
-    offset = 25
+    offset = 35
     corners_in_track = get_corners_from_kp(track_points, corners)
     # for each corner keypoint in smoothed track, 
     # get the set of points that make the corner.
