@@ -36,7 +36,7 @@ I have also tried to, given a minimum and maximum track angle corners, draw kerb
 
 ## TODO
 
-- [ ] Fix inconsistencies in data structures.
+- [ ] Fix inconsistencies in data structures (numpy arrays, lists, tuples, etc.).
 - [ ] Refactor code when track drawing is finished.
 - [ ] Test other interpolation methods to obtain the smoothed track.
 - [ ] Tune parameters.
