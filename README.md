@@ -28,6 +28,12 @@ Once the layout has been obtained we can draw the racetrack to get a more appeal
 
 ![Example drawn tracks](/img/tracks_drawn.png)
 
+## Example racetracks
+
+I have also tried to, given a minimum and maximum track angle corners, draw kerbs on the track. This hasn't been really successful. Anyway, below you can see some results of the resulting tracks after adding the kerbs.
+
+![Example tracks with kerbs](/img/tracks_kerb.png)
+
 ## TODO
 
 - [ ] Fix inconsistencies in data structures.
