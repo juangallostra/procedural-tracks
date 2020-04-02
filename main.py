@@ -184,7 +184,6 @@ def get_corners_with_kerb(points, kerb_angle=KERB_ANGLE):
         require_kerb.append(points[i])
     return require_kerb
 
-
 def smooth_track(track_points):
     x = np.array([p[0] for p in track_points])
     y = np.array([p[1] for p in track_points])
@@ -200,6 +199,20 @@ def smooth_track(track_points):
     # evaluate the spline fits for 1000 evenly spaced distance values
     xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
     return [(int(xi[i]), int(yi[i])) for i in range(len(xi))]
+
+def get_corners_from_kp(complete_track, corner_kp):
+    # for each detected corner find closest point in final track (smoothed track)
+    return [find_closest_point(complete_track, corner) for corner in corner_kp]
+
+def find_closest_point(points, keypoint):
+    min_dist = None
+    closest_point = None
+    for p in points:
+        dist = math.hypot(p[0]-keypoint[0], p[1]-keypoint[1])
+        if min_dist is None or dist < min_dist:
+            min_dist = dist
+            closest_point = p
+    return closest_point
 
 ## drawing functions
 def draw_points(surface, color, points):
@@ -285,12 +298,15 @@ def main(debug=True):
     points = random_points(10, 20)
     hull = ConvexHull(points)
     track_points = shape_track(get_track_points(hull, points))
-    kerb_points = get_corners_with_kerb(track_points)
+    corner_points = get_corners_with_kerb(track_points)
     f_points = smooth_track(track_points)
+    # get complete corners from keypoints
+    corners = get_corners_from_kp(f_points, corner_points)
     if debug:
         # draw the different elements that end up
         # making the track
-        print(kerb_points)
+        print(corner_points)
+        print(corners)
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
