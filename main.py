@@ -7,6 +7,7 @@ import scipy as sc
 from scipy.spatial import ConvexHull
 from scipy import interpolate
 
+## Track parameters
 WIDTH = 800 
 HEIGHT = 600
 
@@ -24,10 +25,17 @@ DIFFICULTY = 0.1
 MIN_POINTS = 20
 MAX_POINTS = 30
 DISTANCE_BETWEEN_POINTS = 20
+MAX_ANGLE = 90
+KERB_ANGLE = 45
 
+## Drawing
 STARTING_GRID_TILE = 'grid_tile.png'
 START_TILE_HEIGHT = 10
 START_TILE_WIDTH = 10
+
+KERB_TILE = 'kerb_tile.png'
+KERB_TILE_HEIGHT = 18
+KERB_TILE_WIDTH = 18
 
 COOL_TRACK_SEEDS = [
     911, 
@@ -123,7 +131,7 @@ def push_points_apart(points, distance=DISTANCE_BETWEEN_POINTS):
                 points[i][1] = int(points[i][1] - dy);  
     return points
 
-def fix_angles(points, max_angle=90):
+def fix_angles(points, max_angle=MAX_ANGLE):
     for i in range(len(points)):
         if i > 0:
             prev_point = i - 1
@@ -151,6 +159,31 @@ def fix_angles(points, max_angle=90):
         points[next_point][0] = int(points[i][0] + new_x)
         points[next_point][1] = int(points[i][1] + new_y)
     return points
+
+def get_corners_with_kerb(points, kerb_angle=KERB_ANGLE):
+    require_kerb = []
+    for i in range(len(points)):
+        if i > 0:
+            prev_point = i - 1
+        else:
+            prev_point = len(points)-1
+        next_point = (i+1) % len(points)
+        px = points[i][0] - points[prev_point][0]
+        py = points[i][1] - points[prev_point][1]
+        pl = math.sqrt(px*px + py*py)
+        px /= pl
+        py /= pl
+        nx = -(points[i][0] - points[next_point][0])
+        ny = -(points[i][1] - points[next_point][1])
+        nl = math.sqrt(nx*nx + ny*ny)
+        nx /= nl
+        ny /= nl  
+        a = math.atan2(px * ny - py * nx, px * nx + py * ny)
+        if (abs(math.degrees(a)) <= kerb_angle):
+            continue
+        require_kerb.append(points[i])
+    return require_kerb
+
 
 def smooth_track(track_points):
     x = np.array([p[0] for p in track_points])
@@ -220,6 +253,9 @@ def draw_track(surface, color, points):
     rot_grid = pygame.transform.rotate(starting_grid, -angle)
     start_pos = (points[0][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[0][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
     surface.blit(rot_grid, start_pos)
+    # WIP: draw kerbs
+    # kerb = draw_single_kerb(radius*2)
+    # surface.blit(kerb, (100,100))
 
 def draw_starting_grid(track_width):
     tile_height = START_TILE_HEIGHT # Move outside
@@ -231,28 +267,40 @@ def draw_starting_grid(track_width):
         starting_grid.blit(grid_tile, position)
     return starting_grid
 
+def draw_single_kerb(track_width):
+    tile_height = KERB_TILE_HEIGHT # Move outside
+    tile_width = KERB_TILE_WIDTH # Move outside
+    kerb_tile = pygame.image.load(KERB_TILE)
+    kerb = pygame.Surface((track_width, tile_height), pygame.SRCALPHA)
+    kerb.blit(kerb_tile, (0, 0))
+    return kerb
+
 def main(debug=True):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     background_color = GRASS_GREEN
     screen.fill(background_color)
 
-    # generate random points
+    # generate the track
     points = random_points(10, 20)
     hull = ConvexHull(points)
     track_points = shape_track(get_track_points(hull, points))
+    kerb_points = get_corners_with_kerb(track_points)
     f_points = smooth_track(track_points)
     if debug:
+        # draw the different elements that end up
+        # making the track
+        print(kerb_points)
         draw_points(screen, WHITE, points)
         draw_convex_hull(hull, screen, points, RED)
         draw_points(screen, BLUE, track_points)
         draw_lines_from_points(screen, BLUE, track_points)    
         draw_points(screen, BLACK, f_points)
-    ## TEST
+    # draw the actual track (road, kerbs, starting grid)
     draw_track(screen, GREY, f_points)
 
     pygame.display.set_caption('Procedural Race Track')
-    while True: # main game loop
+    while True: # main loop
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -261,4 +309,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=False)
+    main(debug=True)
