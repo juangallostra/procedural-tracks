@@ -29,6 +29,8 @@ MAX_ANGLE = 90
 MIN_KERB_ANGLE = 45
 MAX_KERB_ANGLE = 90
 
+N_CHECKPOINTS = 10
+
 ## Drawing
 STARTING_GRID_TILE = 'static/grid_tile.png'
 START_TILE_HEIGHT = 10
@@ -233,6 +235,16 @@ def find_closest_point(points, keypoint):
             closest_point = p
     return closest_point
 
+def get_checkpoints(track_points, n_checkpoints=N_CHECKPOINTS):
+    # get step between checkpoints
+    checkpoint_step = len(track_points) // n_checkpoints
+    # get checkpoint track points
+    checkpoints = []
+    for i in range(N_CHECKPOINTS):
+        index = i * checkpoint_step
+        checkpoints.append(track_points[index])
+    return checkpoints
+
 ## drawing functions
 def draw_points(surface, color, points):
     for p in points:
@@ -269,7 +281,7 @@ def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
 def draw_track(surface, color, points, corners):
-    # WIP: draw kerbs
+    # draw kerbs
     draw_corner_kerbs(surface, corners)
     # draw track
     radius = 20
@@ -299,6 +311,33 @@ def draw_starting_grid(track_width):
         position = (i*tile_width, 0)
         starting_grid.blit(grid_tile, position)
     return starting_grid
+
+def draw_checkpoint(track_surface, points, checkpoint):
+    # given the main point of a checkpoint, compute and draw the checkpoint box
+    margin = 5
+    radius = 20 + margin
+    offset = 3
+    check_index = points.index(checkpoint)
+    vec_p = [points[check_index + offset][1] - points[check_index][1], -(points[check_index+offset][0] - points[check_index][0])]
+    n_vec_p = [vec_p[0] / math.hypot(vec_p[0], vec_p[1]), vec_p[1] / math.hypot(vec_p[0], vec_p[1])]
+    # compute angle
+    angle = math.degrees(math.atan2(n_vec_p[1], n_vec_p[0]))
+    # draw checkpoint
+    checkpoint = draw_rectangle((radius*2, 5), BLUE, line_thickness=1, fill=False)
+    rot_checkpoint = pygame.transform.rotate(checkpoint, -angle)
+    check_pos = (points[check_index][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[check_index][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
+    track_surface.blit(rot_checkpoint, check_pos)
+    
+# def draw_checkpoints():
+#     pass
+
+def draw_rectangle(dimensions, color, line_thickness=1, fill=False):
+    filled = line_thickness
+    if fill:
+        filled = 0
+    rect_surf = pygame.Surface(dimensions, pygame.SRCALPHA)
+    pygame.draw.rect(rect_surf, color, (0, 0, dimensions[0], dimensions[1]), filled)
+    return rect_surf
 
 def draw_corner_kerbs(track_surface, corners):
     # rotate and place kerbs
@@ -345,7 +384,11 @@ def draw_single_kerb():
     kerb.blit(kerb_tile, (0, 0))
     return kerb
 
-def main(debug=True):
+def draw_checkpoints(checkpoints):
+    pass
+
+## Main function
+def main(debug=True, draw_checkpoints_in_track=True):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     background_color = GRASS_GREEN
@@ -361,6 +404,11 @@ def main(debug=True):
     corners = get_full_corners(f_points, corner_points)
     # draw the actual track (road, kerbs, starting grid)
     draw_track(screen, GREY, f_points, corners)
+    # draw checkpoints
+    checkpoints = get_checkpoints(f_points)
+    if draw_checkpoints_in_track or debug:
+        for checkpoint in checkpoints:
+            draw_checkpoint(screen, f_points, checkpoint)
     if debug:
         # draw the different elements that end up
         # making the track
@@ -380,4 +428,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=True)
+    main(debug=False, draw_checkpoints_in_track=False)
