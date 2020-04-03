@@ -178,8 +178,9 @@ def get_corners_with_kerb(points, min_kerb_angle=MIN_KERB_ANGLE, max_kerb_angle=
         ny = -(points[i][1] - points[next_point][1])
         nl = math.sqrt(nx*nx + ny*ny)
         nx /= nl
-        ny /= nl  
-        a = math.atan2(px * ny - py * nx, px * nx + py * ny)
+        ny /= nl 
+        # a = math.atan2(px * ny - py * nx, px * nx + py * ny)
+        a = math.atan(px * ny - py * nx)
         if (min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
             continue
         require_kerb.append(points[i])
@@ -203,7 +204,7 @@ def smooth_track(track_points):
 
 def get_full_corners(track_points, corners):
     # get full range of points that conform the corner
-    offset = 35
+    offset = 20
     corners_in_track = get_corners_from_kp(track_points, corners)
     # for each corner keypoint in smoothed track, 
     # get the set of points that make the corner.
@@ -358,6 +359,8 @@ def main(debug=True):
     f_points = smooth_track(track_points)
     # get complete corners from keypoints
     corners = get_full_corners(f_points, corner_points)
+    # draw the actual track (road, kerbs, starting grid)
+    draw_track(screen, GREY, f_points, corners)
     if debug:
         # draw the different elements that end up
         # making the track
@@ -366,8 +369,6 @@ def main(debug=True):
         draw_points(screen, BLUE, track_points)
         draw_lines_from_points(screen, BLUE, track_points)    
         draw_points(screen, BLACK, f_points)
-    # draw the actual track (road, kerbs, starting grid)
-    draw_track(screen, GREY, f_points, corners)
 
     pygame.display.set_caption('Procedural Race Track')
     while True: # main loop
