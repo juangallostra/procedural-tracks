@@ -312,7 +312,7 @@ def draw_starting_grid(track_width):
         starting_grid.blit(grid_tile, position)
     return starting_grid
 
-def draw_checkpoint(track_surface, points, checkpoint):
+def draw_checkpoint(track_surface, points, checkpoint, debug=False):
     # given the main point of a checkpoint, compute and draw the checkpoint box
     margin = 5
     radius = 20 + margin
@@ -325,6 +325,8 @@ def draw_checkpoint(track_surface, points, checkpoint):
     # draw checkpoint
     checkpoint = draw_rectangle((radius*2, 5), BLUE, line_thickness=1, fill=False)
     rot_checkpoint = pygame.transform.rotate(checkpoint, -angle)
+    if debug:
+        rot_checkpoint.fill(RED)
     check_pos = (points[check_index][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[check_index][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
     track_surface.blit(rot_checkpoint, check_pos)
     
@@ -408,7 +410,7 @@ def main(debug=True, draw_checkpoints_in_track=True):
     checkpoints = get_checkpoints(f_points)
     if draw_checkpoints_in_track or debug:
         for checkpoint in checkpoints:
-            draw_checkpoint(screen, f_points, checkpoint)
+            draw_checkpoint(screen, f_points, checkpoint, debug)
     if debug:
         # draw the different elements that end up
         # making the track
@@ -428,4 +430,4 @@ def main(debug=True, draw_checkpoints_in_track=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=False, draw_checkpoints_in_track=False)
+    main(debug=False, draw_checkpoints_in_track=True)
