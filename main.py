@@ -30,11 +30,11 @@ MIN_KERB_ANGLE = 45
 MAX_KERB_ANGLE = 90
 
 ## Drawing
-STARTING_GRID_TILE = 'grid_tile.png'
+STARTING_GRID_TILE = 'static/grid_tile.png'
 START_TILE_HEIGHT = 10
 START_TILE_WIDTH = 10
 
-KERB_TILE = 'kerb_tile.png'
+KERB_TILE = 'static/kerb_tile.png'
 KERB_TILE_HEIGHT = 7
 KERB_TILE_WIDTH = 12
 
