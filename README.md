@@ -24,13 +24,17 @@ By following this steps we can get the layout of the track.
 
 ## Example racetracks
 
-Once the layout has been obtained we can draw the racetrack to get a more appealing result. 
+Once the layout has been obtained we can draw the racetrack and add a starting grid to get a more appealing result.
+
+The process is simple, we grow each point of the obtained spline into a circle of radius `r` and fill it with the given color.
+
+To add the grid that marks the begining of the track we get the first and fourth (this can be easily modified) points in the spline and compute a vector perpendicular to the one obtained from those two points. Then we rotate the grid by the angle of the perpendicular vector and place it at the position of the first point in the spline.
 
 ![Example drawn tracks](/img/tracks_drawn.png)
 
 ## Example racetracks
 
-I have also tried to, given a minimum and maximum track angle corners, draw kerbs on the track. This hasn't been really successful. Anyway, below you can see some results of the resulting tracks after adding the kerbs.
+I have also tried to, given a minimum and maximum track angle corners, draw kerbs on the track. This hasn't been really successful. Anyway, below you can see some results of the obtained tracks after adding the kerbs.
 
 ![Example tracks with kerbs](/img/tracks_kerb.png)
 
