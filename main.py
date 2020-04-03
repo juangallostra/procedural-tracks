@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import *
-import random as rn
 import math
+import random as rn
 import numpy as np
 import scipy as sc
 from scipy.spatial import ConvexHull
