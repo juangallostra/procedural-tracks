@@ -304,8 +304,8 @@ def draw_corner_kerbs(track_surface, corners):
     rad = 20
     step = 4
     offset = 5
-    sec_x = 5
-    sec_y = 4
+    correction_x = 5
+    correction_y = 4
     for corner in corners:
         temp_corner = corner + corner
         last_kerb = None
@@ -325,8 +325,8 @@ def draw_corner_kerbs(track_surface, corners):
             if angle > 180:
                 m_x = -1
             start_pos = (
-                corner[i][0] + m_x * n_vec_perp[0] * rad - sec_x, 
-                corner[i][1] + m_y * n_vec_perp[1] * rad - sec_y
+                corner[i][0] + m_x * n_vec_perp[0] * rad - correction_x, 
+                corner[i][1] + m_y * n_vec_perp[1] * rad - correction_y
             )
             if last_kerb is None:
                 last_kerb = start_pos
@@ -379,4 +379,4 @@ def main(debug=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=False)
+    main(debug=True)
