@@ -51,3 +51,10 @@ I have also tried to, given a minimum and maximum track angle corners, draw kerb
 - [ ] Tune parameters.
 - [ ] Find a better method to detect corners.
 - [x] Add kerbs to corners.
+
+## Roadmap
+
+1. Add checkpoints to track
+2. Improve and tune subsystems. Play with parameters. 
+3. Divide surface in a grid
+4. Refactor code
