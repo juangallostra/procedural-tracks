@@ -1,28 +1,10 @@
-## Track parameters
+# Screen dimensions
 WIDTH = 800 
 HEIGHT = 600
 
-WHITE = [255, 255, 255]
-BLACK = [0, 0, 0]
-RED = [255, 0, 0]
-BLUE = [0, 0, 255]
-GRASS_GREEN = [58, 156, 53]
-GREY = [186, 182, 168]
-
-MARGIN = 50
-MIN_DISTANCE = 20
-MAX_DISPLACEMENT = 80
-DIFFICULTY = 0.1
-MIN_POINTS = 20
-MAX_POINTS = 30
-DISTANCE_BETWEEN_POINTS = 20
-MAX_ANGLE = 90
-MIN_KERB_ANGLE = 45
-MAX_KERB_ANGLE = 90
-
-N_CHECKPOINTS = 10
-
-## Drawing
+###
+# Drawing
+###
 STARTING_GRID_TILE = 'static/grid_tile.png'
 START_TILE_HEIGHT = 10
 START_TILE_WIDTH = 10
@@ -31,6 +13,51 @@ KERB_TILE = 'static/kerb_tile.png'
 KERB_TILE_HEIGHT = 7
 KERB_TILE_WIDTH = 12
 
+# Colors
+WHITE = [255, 255, 255]
+BLACK = [0, 0, 0]
+RED = [255, 0, 0]
+BLUE = [0, 0, 255]
+GRASS_GREEN = [58, 156, 53]
+GREY = [186, 182, 168]
+
+
+###
+# Track parameters
+###
+
+# Boundaries for the numbers of points that will be randomly 
+# generated to define the initial polygon used to build the track
+MIN_POINTS = 20
+MAX_POINTS = 30
+
+# Margin between screen limits and any of the points that shape the
+# initial polygon
+MARGIN = 50
+# minimum distance between points that form the track skeleton
+MIN_DISTANCE = 20
+# Maximum midpoint displacement for points placed after obtaining the initial polygon
+MAX_DISPLACEMENT = 80
+# Track difficulty
+DIFFICULTY = 0.1
+# min distance between two points that are part of thr track skeleton
+DISTANCE_BETWEEN_POINTS = 20
+# Maximum corner allowed angle
+MAX_ANGLE = 90
+
+# Angle boundaries used to determine the corners that will have a kerb
+MIN_KERB_ANGLE = 45
+MAX_KERB_ANGLE = 90
+
+
+###
+# Game parameters
+###
+N_CHECKPOINTS = 10
+
+###
+# Some seeds I find cool or interesting
+###
 COOL_TRACK_SEEDS = [
     911, 
     639620465, 
