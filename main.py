@@ -283,8 +283,8 @@ def draw_rectangle(dimensions, color, line_thickness=1, fill=False):
 
 def draw_corner_kerbs(track_surface, corners, track_width):
     # rotate and place kerbs
-    step = 4
-    offset = 5
+    step = STEP_TO_NEXT_KERB_POINT
+    offset = KERB_POINT_ANGLE_OFFSET
     correction_x = KERB_PLACEMENT_X_CORRECTION
     correction_y = KERB_PLACEMENT_Y_CORRECTION
     for corner in corners:
