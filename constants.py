@@ -5,6 +5,8 @@ HEIGHT = 600
 ###
 # Drawing
 ###
+TITLE = 'Procedural Race Track'
+
 STARTING_GRID_TILE = 'static/grid_tile.png'
 START_TILE_HEIGHT = 10
 START_TILE_WIDTH = 10

@@ -356,7 +356,7 @@ def main(debug=True, draw_checkpoints_in_track=True):
         draw_lines_from_points(screen, BLUE, track_points)    
         draw_points(screen, BLACK, f_points)
 
-    pygame.display.set_caption('Procedural Race Track')
+    pygame.display.set_caption(TITLE)
     while True: # main loop
         for event in pygame.event.get():
             if event.type == QUIT:
