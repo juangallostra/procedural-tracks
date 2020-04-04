@@ -285,8 +285,8 @@ def draw_corner_kerbs(track_surface, corners, track_width):
     # rotate and place kerbs
     step = 4
     offset = 5
-    correction_x = 5
-    correction_y = 4
+    correction_x = KERB_PLACEMENT_X_CORRECTION
+    correction_y = KERB_PLACEMENT_Y_CORRECTION
     for corner in corners:
         temp_corner = corner + corner
         last_kerb = None
