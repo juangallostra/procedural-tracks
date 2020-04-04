@@ -7,64 +7,7 @@ import scipy as sc
 from scipy.spatial import ConvexHull
 from scipy import interpolate
 
-## Track parameters
-WIDTH = 800 
-HEIGHT = 600
-
-WHITE = [255, 255, 255]
-BLACK = [0, 0, 0]
-RED = [255, 0, 0]
-BLUE = [0, 0, 255]
-GRASS_GREEN = [58, 156, 53]
-GREY = [186, 182, 168]
-
-MARGIN = 50
-MIN_DISTANCE = 20
-MAX_DISPLACEMENT = 80
-DIFFICULTY = 0.1
-MIN_POINTS = 20
-MAX_POINTS = 30
-DISTANCE_BETWEEN_POINTS = 20
-MAX_ANGLE = 90
-MIN_KERB_ANGLE = 45
-MAX_KERB_ANGLE = 90
-
-N_CHECKPOINTS = 10
-
-## Drawing
-STARTING_GRID_TILE = 'static/grid_tile.png'
-START_TILE_HEIGHT = 10
-START_TILE_WIDTH = 10
-
-KERB_TILE = 'static/kerb_tile.png'
-KERB_TILE_HEIGHT = 7
-KERB_TILE_WIDTH = 12
-
-COOL_TRACK_SEEDS = [
-    911, 
-    639620465, 
-    666574559, 
-    689001243, 
-    608068482, 
-    1546, 
-    8, 
-    83, 
-    945, 
-    633, 
-    10, 
-    23, 
-    17, 
-    123, 
-    1217, 
-    12, 
-    5644, 
-    5562, 
-    2317, 
-    1964, 
-    95894, 
-    95521
-]
-# SEED = 
+from constants import *
 
 ## logical functions
 def random_points(min=MIN_POINTS, max=MAX_POINTS, margin=MARGIN, min_distance=MIN_DISTANCE):
@@ -99,7 +42,7 @@ def shape_track(track_points, difficulty=DIFFICULTY, max_displacement=MAX_DISPLA
     for i in range(3):
         track_set = fix_angles(track_set)
         track_set = push_points_apart(track_set)
-    # push any point outside limits back again
+    # push any point outside screen limits back again
     final_set = []
     for point in track_set:
         if point[0] < margin:
@@ -115,7 +58,7 @@ def shape_track(track_points, difficulty=DIFFICULTY, max_displacement=MAX_DISPLA
 
 def push_points_apart(points, distance=DISTANCE_BETWEEN_POINTS):
     # distance might need some tweaking
-    distance2 = distance*distance 
+    distance2 = distance * distance 
     for i in range(len(points)):
         for j in range(i+1, len(points)):
             p_distance =  math.sqrt((points[i][0]-points[j][0])**2 + (points[i][1]-points[j][1])**2)
@@ -329,9 +272,6 @@ def draw_checkpoint(track_surface, points, checkpoint, debug=False):
         rot_checkpoint.fill(RED)
     check_pos = (points[check_index][0] - math.copysign(1, n_vec_p[0])*n_vec_p[0] * radius, points[check_index][1] - math.copysign(1, n_vec_p[1])*n_vec_p[1] * radius)    
     track_surface.blit(rot_checkpoint, check_pos)
-    
-# def draw_checkpoints():
-#     pass
 
 def draw_rectangle(dimensions, color, line_thickness=1, fill=False):
     filled = line_thickness
