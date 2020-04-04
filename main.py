@@ -259,7 +259,7 @@ def draw_checkpoint(track_surface, points, checkpoint, debug=False):
     # given the main point of a checkpoint, compute and draw the checkpoint box
     margin = 5
     radius = TRACK_WIDTH // 2 + margin
-    offset = 3
+    offset = CHECKPOINT_POINT_ANGLE_OFFSET
     check_index = points.index(checkpoint)
     vec_p = [points[check_index + offset][1] - points[check_index][1], -(points[check_index+offset][0] - points[check_index][0])]
     n_vec_p = [vec_p[0] / math.hypot(vec_p[0], vec_p[1]), vec_p[1] / math.hypot(vec_p[0], vec_p[1])]
