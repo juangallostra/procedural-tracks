@@ -49,6 +49,7 @@ MAX_ANGLE = 90
 MIN_KERB_ANGLE = 45
 MAX_KERB_ANGLE = 90
 
+TRACK_WIDTH = 40
 
 ###
 # Game parameters

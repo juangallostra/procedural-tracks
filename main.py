@@ -224,10 +224,10 @@ def draw_single_line(surface, color, init, end):
     pygame.draw.line(surface, color, init, end)
 
 def draw_track(surface, color, points, corners):
+    radius = TRACK_WIDTH // 2
     # draw kerbs
-    draw_corner_kerbs(surface, corners)
+    draw_corner_kerbs(surface, corners, radius)
     # draw track
-    radius = 20
     chunk_dimensions = (radius * 2, radius * 2)
     for point in points:
         blit_pos = (point[0] - radius, point[1] - radius)
@@ -258,7 +258,7 @@ def draw_starting_grid(track_width):
 def draw_checkpoint(track_surface, points, checkpoint, debug=False):
     # given the main point of a checkpoint, compute and draw the checkpoint box
     margin = 5
-    radius = 20 + margin
+    radius = TRACK_WIDTH // 2 + margin
     offset = 3
     check_index = points.index(checkpoint)
     vec_p = [points[check_index + offset][1] - points[check_index][1], -(points[check_index+offset][0] - points[check_index][0])]
@@ -281,9 +281,8 @@ def draw_rectangle(dimensions, color, line_thickness=1, fill=False):
     pygame.draw.rect(rect_surf, color, (0, 0, dimensions[0], dimensions[1]), filled)
     return rect_surf
 
-def draw_corner_kerbs(track_surface, corners):
+def draw_corner_kerbs(track_surface, corners, track_width):
     # rotate and place kerbs
-    rad = 20
     step = 4
     offset = 5
     correction_x = 5
@@ -307,13 +306,13 @@ def draw_corner_kerbs(track_surface, corners):
             if angle > 180:
                 m_x = -1
             start_pos = (
-                corner[i][0] + m_x * n_vec_perp[0] * rad - correction_x, 
-                corner[i][1] + m_y * n_vec_perp[1] * rad - correction_y
+                corner[i][0] + m_x * n_vec_perp[0] * track_width - correction_x, 
+                corner[i][1] + m_y * n_vec_perp[1] * track_width - correction_y
             )
             if last_kerb is None:
                 last_kerb = start_pos
             else:
-                if math.hypot(start_pos[0] - last_kerb[0], start_pos[1]-last_kerb[1]) >= rad:
+                if math.hypot(start_pos[0] - last_kerb[0], start_pos[1]-last_kerb[1]) >= track_width:
                     continue
             last_kerb = start_pos
             track_surface.blit(rot_kerb, start_pos)
@@ -334,7 +333,7 @@ def main(debug=True, draw_checkpoints_in_track=True):
     screen.fill(background_color)
 
     # generate the track
-    points = random_points(10, 20)
+    points = random_points()
     hull = ConvexHull(points)
     track_points = shape_track(get_track_points(hull, points))
     corner_points = get_corners_with_kerb(track_points)
