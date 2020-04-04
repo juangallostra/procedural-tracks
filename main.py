@@ -206,7 +206,7 @@ def smooth_track(track_points):
 
 def get_full_corners(track_points, corners):
     # get full range of points that conform the corner
-    offset = 20
+    offset = 17
     corners_in_track = get_corners_from_kp(track_points, corners)
     # for each corner keypoint in smoothed track, 
     # get the set of points that make the corner.
@@ -430,4 +430,4 @@ def main(debug=True, draw_checkpoints_in_track=True):
 
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
-    main(debug=False, draw_checkpoints_in_track=True)
+    main(debug=False, draw_checkpoints_in_track=False)
