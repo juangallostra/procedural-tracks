@@ -257,7 +257,7 @@ def draw_starting_grid(track_width):
 
 def draw_checkpoint(track_surface, points, checkpoint, debug=False):
     # given the main point of a checkpoint, compute and draw the checkpoint box
-    margin = 5
+    margin = CHECKPOINT_MARGIN
     radius = TRACK_WIDTH // 2 + margin
     offset = CHECKPOINT_POINT_ANGLE_OFFSET
     check_index = points.index(checkpoint)
