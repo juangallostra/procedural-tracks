@@ -326,9 +326,6 @@ def draw_single_kerb():
     kerb.blit(kerb_tile, (0, 0))
     return kerb
 
-def draw_checkpoints(checkpoints):
-    pass
-
 ## Main function
 def main(debug=True, draw_checkpoints_in_track=True):
     pygame.init()
