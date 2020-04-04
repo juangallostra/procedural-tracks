@@ -236,7 +236,7 @@ def draw_track(surface, color, points, corners):
         surface.blit(track_chunk, blit_pos)
     starting_grid = draw_starting_grid(radius*2)
     # rotate and place starting grid
-    offset = 3
+    offset = TRACK_POINT_ANGLE_OFFSET
     vec_p = [points[offset][1] - points[0][1], -(points[offset][0] - points[0][0])]
     n_vec_p = [vec_p[0] / math.hypot(vec_p[0], vec_p[1]), vec_p[1] / math.hypot(vec_p[0], vec_p[1])]
     # compute angle
