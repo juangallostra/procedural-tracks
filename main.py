@@ -143,13 +143,13 @@ def smooth_track(track_points):
     # is needed in order to force the spline fit to pass through all the input points.
     tck, u = interpolate.splprep([x, y], s=0, per=True)
 
-    # evaluate the spline fits for 1000 evenly spaced distance values
-    xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
+    # evaluate the spline fits for # points evenly spaced distance values
+    xi, yi = interpolate.splev(np.linspace(0, 1, SPLINE_POINTS), tck)
     return [(int(xi[i]), int(yi[i])) for i in range(len(xi))]
 
 def get_full_corners(track_points, corners):
     # get full range of points that conform the corner
-    offset = 17
+    offset = FULL_CORNER_NUM_POINTS
     corners_in_track = get_corners_from_kp(track_points, corners)
     # for each corner keypoint in smoothed track, 
     # get the set of points that make the corner.

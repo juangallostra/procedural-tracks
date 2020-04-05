@@ -42,6 +42,8 @@ TRACK_POINT_ANGLE_OFFSET = 3
 MIN_POINTS = 20
 MAX_POINTS = 30
 
+SPLINE_POINTS = 1000
+
 # Margin between screen limits and any of the points that shape the
 # initial polygon
 MARGIN = 50
@@ -61,6 +63,8 @@ MIN_KERB_ANGLE = 45
 MAX_KERB_ANGLE = 90
 
 TRACK_WIDTH = 40
+
+FULL_CORNER_NUM_POINTS = 17
 
 ###
 # Game parameters
