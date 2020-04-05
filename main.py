@@ -9,7 +9,9 @@ from scipy import interpolate
 
 from constants import *
 
+####
 ## logical functions
+####
 def random_points(min=MIN_POINTS, max=MAX_POINTS, margin=MARGIN, min_distance=MIN_DISTANCE):
     pointCount = rn.randrange(min, max+1, 1)
     points = []
@@ -188,7 +190,9 @@ def get_checkpoints(track_points, n_checkpoints=N_CHECKPOINTS):
         checkpoints.append(track_points[index])
     return checkpoints
 
+####
 ## drawing functions
+####
 def draw_points(surface, color, points):
     for p in points:
         draw_single_point(surface, color, p)
@@ -325,7 +329,9 @@ def draw_single_kerb():
     kerb.blit(kerb_tile, (0, 0))
     return kerb
 
+####
 ## Main function
+####
 def main(debug=True, draw_checkpoints_in_track=True):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
