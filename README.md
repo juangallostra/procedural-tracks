@@ -45,10 +45,11 @@ I have also tried to, given a minimum and maximum track angle corners, draw kerb
 
 ## TODO
 
+- [ ] Add command line arguments.
 - [ ] Fix inconsistencies in data structures (numpy arrays, lists, tuples, etc.).
 - [ ] Refactor code when track drawing is finished.
 - [ ] Test other interpolation methods to obtain the smoothed track.
-- [ ] Tune parameters.
+- [x] Tune parameters.
 - [ ] Find a better method to detect corners.
 - [x] Add kerbs to corners.
 
