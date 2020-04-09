@@ -128,7 +128,6 @@ def get_corners_with_kerb(points, min_kerb_angle=MIN_KERB_ANGLE, max_kerb_angle=
         nx /= nl
         ny /= nl 
         a = math.atan(px * ny - py * nx)
-        print(math.degrees(a))
         if (min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
             require_kerb.append(points[i])
     return require_kerb
