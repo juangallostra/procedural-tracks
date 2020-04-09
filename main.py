@@ -351,9 +351,9 @@ def main(debug=True, draw_checkpoints_in_track=True):
     draw_track(screen, GREY, f_points, corners)
     # draw checkpoints
     checkpoints = get_checkpoints(f_points)
-    # if draw_checkpoints_in_track or debug:
-    #     for checkpoint in checkpoints:
-    #         draw_checkpoint(screen, f_points, checkpoint, debug)
+    if draw_checkpoints_in_track or debug:
+        for checkpoint in checkpoints:
+            draw_checkpoint(screen, f_points, checkpoint, debug)
     if debug:
         # draw the different elements that end up
         # making the track
