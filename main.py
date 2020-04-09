@@ -387,4 +387,11 @@ def str2bool(v):
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
     parser = argparse.ArgumentParser(description="Procedural racetrack generator")
+    # Add parser options
+    parser.add_argument("--debug", type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help="Show racetrack generation steps")
+    parser.add_argument("--show-checkpoints", type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help="Show checkpoints")
     main(debug=False, draw_checkpoints_in_track=False)
