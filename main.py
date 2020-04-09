@@ -117,21 +117,20 @@ def get_corners_with_kerb(points, min_kerb_angle=MIN_KERB_ANGLE, max_kerb_angle=
         else:
             prev_point = len(points)-1
         next_point = (i+1) % len(points)
-        px = points[i][0] - points[prev_point][0]
-        py = points[i][1] - points[prev_point][1]
+        px = points[prev_point][0] - points[i][0]
+        py = points[prev_point][1] - points[i][1]
         pl = math.sqrt(px*px + py*py)
         px /= pl
         py /= pl
-        nx = -(points[i][0] - points[next_point][0])
-        ny = -(points[i][1] - points[next_point][1])
+        nx = points[next_point][0] - points[i][0]
+        ny = points[next_point][1] - points[i][1]
         nl = math.sqrt(nx*nx + ny*ny)
         nx /= nl
         ny /= nl 
-        # a = math.atan2(px * ny - py * nx, px * nx + py * ny)
         a = math.atan(px * ny - py * nx)
+        print(math.degrees(a))
         if (min_kerb_angle <= abs(math.degrees(a)) <= max_kerb_angle):
-            continue
-        require_kerb.append(points[i])
+            require_kerb.append(points[i])
     return require_kerb
 
 def smooth_track(track_points):

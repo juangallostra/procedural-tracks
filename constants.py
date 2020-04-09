@@ -59,7 +59,7 @@ DISTANCE_BETWEEN_POINTS = 20
 MAX_ANGLE = 90
 
 # Angle boundaries used to determine the corners that will have a kerb
-MIN_KERB_ANGLE = 45
+MIN_KERB_ANGLE = 20
 MAX_KERB_ANGLE = 90
 
 TRACK_WIDTH = 40
