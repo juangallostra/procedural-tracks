@@ -6,6 +6,7 @@ import numpy as np
 import scipy as sc
 from scipy.spatial import ConvexHull
 from scipy import interpolate
+import argparse
 
 from constants import *
 
@@ -350,9 +351,9 @@ def main(debug=True, draw_checkpoints_in_track=True):
     draw_track(screen, GREY, f_points, corners)
     # draw checkpoints
     checkpoints = get_checkpoints(f_points)
-    if draw_checkpoints_in_track or debug:
-        for checkpoint in checkpoints:
-            draw_checkpoint(screen, f_points, checkpoint, debug)
+    # if draw_checkpoints_in_track or debug:
+    #     for checkpoint in checkpoints:
+    #         draw_checkpoint(screen, f_points, checkpoint, debug)
     if debug:
         # draw the different elements that end up
         # making the track
@@ -370,6 +371,20 @@ def main(debug=True, draw_checkpoints_in_track=True):
                 sys.exit()
         pygame.display.update()
 
+def str2bool(v):
+    """
+    Helper method to parse strings into boolean values
+    """
+    if isinstance(v, bool):
+       return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 if __name__ == '__main__':
     # rn.seed(rn.choice(COOL_TRACK_SEEDS))
+    parser = argparse.ArgumentParser(description="Procedural racetrack generator")
     main(debug=False, draw_checkpoints_in_track=False)
