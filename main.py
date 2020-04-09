@@ -394,4 +394,5 @@ if __name__ == '__main__':
     parser.add_argument("--show-checkpoints", type=str2bool, nargs='?',
                         const=True, default=False,
                         help="Show checkpoints")
-    main(debug=False, draw_checkpoints_in_track=False)
+    args = parser.parse_args()
+    main(debug=args.debug, draw_checkpoints_in_track=args.show_checkpoints)
