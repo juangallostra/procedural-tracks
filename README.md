@@ -1,6 +1,8 @@
 # procedural-tracks
 Procedural race track generation with Python.
 
+Blog post with more insights [here](https://bitesofcode.wordpress.com/2020/04/09/procedural-racetrack-generation/).
+
 Following the article found [here](https://www.gamasutra.com/blogs/GustavoMaciel/20131229/207833/Generating_Procedural_Racetracks.php).
 
 The tracks obtained by my implementation are far from ideal, but it might be a good starting point for further work.
